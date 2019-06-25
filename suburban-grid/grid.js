@@ -228,7 +228,12 @@ $(() => {
             });
             td.on('keypress',function(e) {
                 if(e.which == 13) {
-                    console.log(e.target.parentElement.nextElementSibling.firstChild.focus())
+                    if(e.target.parentElement.nextElementSibling){
+                        e.target.parentElement.nextElementSibling.firstChild.focus()
+                    } else {
+                        e.target.parentElement.parentElement.nextElementSibling.firstChild.nextElementSibling.firstChild.focus()
+                    }
+                    
                 }
             });
             td.appendTo(tr);
