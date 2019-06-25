@@ -1,0 +1,101 @@
+:root {
+  font-size: 12.5px;
+}
+
+.rotate {
+  margin: 0;
+  width: 0;
+  white-space: nowrap;
+  position: absolute;
+  text-align: left;
+  transform-origin: center;
+  transform: rotate(90deg);
+  /* Legacy vendor prefixes that you probably don't need... */
+  /* Safari */
+  -webkit-transform: rotate(90deg);
+  /* Firefox */
+  -moz-transform: rotate(90deg);
+  /* IE */
+  -ms-transform: rotate(90deg);
+  /* Opera */
+  -o-transform: rotate(90deg);
+
+}
+
+table td {
+  position: relative;
+  border: thin;
+  padding: 1em;
+}
+
+
+table td input {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+td {
+  border: 1px solid #e7e7e7 !important;
+  text-align: center;
+  padding: 0 !important;
+  transition: linear 0.3s
+}
+
+input:nth-child(even) {
+  background: #345;
+}
+
+.test {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  white-space: nowrap;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.test2 {
+  transform: rotate(90deg);
+  transform-origin: 50% 50%;
+  white-space: nowrap;
+  min-height: 155px;
+  width: 35px;
+  display: flex !important;
+  align-items: center;
+  user-select: none;
+}
+
+input {
+  width: 100% !important;
+  padding: 3px;
+  text-align: center;
+  transition: linear 0.3s
+}
+
+input:hover {
+  box-shadow: 0 0 3px grey;
+  cursor: pointer;
+  transition: ease 0.3s;
+}
+
+tr:nth-child(1),
+tr:nth-child(2) {
+  background: #ccc;
+  color: #345;
+}
+
+.disabled {
+  background: rgb(233, 233, 233) !important;
+}
+
+.disabled:hover {
+  cursor: default;
+  box-shadow: none;
+}
