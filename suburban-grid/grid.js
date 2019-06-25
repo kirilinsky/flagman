@@ -208,7 +208,7 @@ $(() => {
                     event.target.disabled = true
                 }
                 for (item of _result) {
-                    if (src == item.src && dst == item.dst || dst == item.src && src == item.dst) {
+                    if ((src == item.src && dst == item.dst) || (dst == item.src && src == item.dst)) {
                         item.value = Number(event.target.value)
                     } else {
                         let obj = {}
@@ -218,16 +218,18 @@ $(() => {
                         _result.push(obj)
                     }
                     inputs.forEach(inp => {
-                        if (inp.getAttribute('data-from') == item.dst && inp.getAttribute('data-to') == item.src) {
-                            inp.value = item.value
-                        }
-                        if (inp.getAttribute('data-from') == item.src && inp.getAttribute('data-to') == item.dst) {
+                        if ((inp.getAttribute('data-from') == item.dst && inp.getAttribute('data-to') == item.src) || (inp.getAttribute('data-from') == item.src && inp.getAttribute('data-to') == item.dst)) {
                             inp.value = item.value
                         }
                     })
                 }
-                console.log(`successfully updated ${src} x ${dst} to new value ${event.target.value}`)
+                //console.log(`successfully updated ${src} x ${dst} to new value ${event.target.value}`)
 
+            });
+            td.on('keypress',function(e) {
+                if(e.which == 13) {
+                    console.log(e.target.parentElement.nextElementSibling.firstChild.focus())
+                }
             });
             td.appendTo(tr);
         }
