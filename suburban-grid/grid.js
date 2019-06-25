@@ -230,10 +230,14 @@ $(() => {
                 if(e.which == 13) {
                     if(e.target.parentElement.nextElementSibling){
                         e.target.parentElement.nextElementSibling.firstChild.focus()
+                        if(e.target.parentElement.nextElementSibling.firstChild){
+                            if(e.target.parentElement.nextElementSibling.firstChild.disabled){
+                                e.target.parentElement.nextElementSibling.nextElementSibling.firstChild.focus()
+                            }
+                        }
                     } else {
                         e.target.parentElement.parentElement.nextElementSibling.firstChild.nextElementSibling.firstChild.focus()
                     }
-                    
                 }
             });
             td.appendTo(tr);
