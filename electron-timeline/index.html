@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Timeline | and how long it is</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <style>
+        :root {
+            font-size: 15px;
+        }
+        body {
+            background: linear-gradient(90deg, rgba(109,37,163,1) 0%, rgba(249,81,96,1) 62%, rgba(252,176,69,1) 100%);
+            padding: .75rem;
+        }
+        .progress-bar {
+            transition: ease 0.3s;
+        }
+    </style>
+  </head>
+  <body>
+      <div class="wrap">
+            <h2 class="text-white">Timeline is... </h2>
+            <hr>
+            <div class="progress">
+                <div 
+                class="progress-bar progress-bar-striped progress-bar-animated"
+                role="progressbar"
+                :style="getProgress"
+                > осталось {{Math.floor(RestInMinutes/60)}} ч. {{RestInMinutes%60}} мин. </div>
+            </div>
+            <button class="btn btn-outline-info m-2" @click="playVoice">play</button>
+      </div>
+    <script src="./vue.min.js"></script>
+    <script>
+        let wrap = new Vue({
+            el:('.wrap'),
+            data:{
+                stat:'ok',
+                end:'480'
+            },
+            computed: {
+                NowHour(){
+                    let hour = new Date()
+                    return hour.getHours()
+                },
+                NowMinutes(){
+                    let min = new Date()
+                    return min.getMinutes()
+                },
+                AlreadyInMinutes(){
+                    let startHour = 10
+                    return (((this.NowHour - startHour) * 60) + this.NowMinutes)
+                },
+                RestInMinutes(){
+                    let rest = this.end - this.AlreadyInMinutes
+                    return rest
+                },
+                getProgress(){
+                    let percent = (this.AlreadyInMinutes / this.end) * 100
+                    return `width: ${percent}%`
+                }
+            },
+            methods:{
+                playVoice(){
+                    playAudio('src')
+                }
+            }
+        })
+    </script>
+  </body>
+</html>
