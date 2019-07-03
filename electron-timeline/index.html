@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Timeline | and how long it is</title>
     <link rel="stylesheet" href="./bootstrap.min.css">
@@ -8,64 +9,160 @@
         :root {
             font-size: 15px;
         }
+
         body {
-            background: linear-gradient(90deg, rgba(109,37,163,1) 0%, rgba(249,81,96,1) 62%, rgba(252,176,69,1) 100%);
+            background: linear-gradient(90deg, rgba(109, 37, 163, 1) 0%, rgba(249, 81, 96, 1) 62%, rgba(252, 176, 69, 1) 100%);
             padding: .75rem;
         }
+
+        .forProgress {
+            width: 100%;
+        }
+
+        .forMilestones {
+            width: 100%;
+            display: flex;
+            padding: .45rem 0;
+            justify-content: space-between;
+        }
+
         .progress-bar {
             transition: ease 0.3s;
         }
+
+        /* vue transitions */
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
     </style>
-  </head>
-  <body>
-      <div class="wrap">
-            <h2 class="text-white">Timeline is... </h2>
-            <hr>
-            <div class="progress">
-                <div 
-                class="progress-bar progress-bar-striped progress-bar-animated"
-                role="progressbar"
-                :style="getProgress"
-                > осталось {{Math.floor(RestInMinutes/60)}} ч. {{RestInMinutes%60}} мин. </div>
+</head>
+
+<body>
+    <div class="wrap">
+        <h2 class="text-white">Timeline is... </h2>
+
+        <hr>
+        <div class="forProgress">
+            <transition name="fade">
+                <div class="progress m-2" v-if="(start && end) && (getPercentProgress < 100)">
+                    <div :class="computeStyle" class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar" :style="getProgress"> осталось {{RestInHours}} {{RestInMinutes%60}} мин.
+                    </div>
+                </div>
+                
+            </transition>
+            <transition name="fade">
+            <div class="alert alert-secondary text-center w-100 mx-auto" role="alert"v-if="(start && end) && (getPercentProgress < 100)">
+                    Прошло {{ Math.floor(AlreadyInMinutes/60) }} ч.
+                </div>
+            </transition>
+            <transition name="fade">
+                <div class="h2 text-center" v-if="(start && end) && getPercentProgress >= 100">Собирай монатки</div>
+            </transition>
+            <div class="forMilestones">
+                <div class="col">
+                    <select class="custom-select" v-model="start">
+                        <option selected disabled>start time</option>
+                        <option value="9">9:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="custom-select" v-model="end">
+                        <option selected disabled>end time</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                        <option value="19">19:00</option>
+                        <option value="20">20:00</option>
+                        <option value="21">21:00</option>
+
+                    </select>
+                </div>
+                
+
+
             </div>
-            <button class="btn btn-outline-info m-2" @click="playVoice">play</button>
-      </div>
+        </div>
+
+
+    </div>
     <script src="./vue.min.js"></script>
     <script>
         let wrap = new Vue({
-            el:('.wrap'),
-            data:{
-                stat:'ok',
-                end:'480'
+            el: ('.wrap'),
+            data: {
+                stat: 'ok',
+                start: null,
+                end: null
             },
             computed: {
-                NowHour(){
+                DifferenceInMinutes() {
+                    let diff = (this.end - this.start) * 60
+                    return diff
+                },
+                NowHour() {
                     let hour = new Date()
                     return hour.getHours()
                 },
-                NowMinutes(){
+                NowMinutes() {
                     let min = new Date()
                     return min.getMinutes()
                 },
-                AlreadyInMinutes(){
-                    let startHour = 10
-                    return (((this.NowHour - startHour) * 60) + this.NowMinutes)
+                AlreadyInMinutes() {
+                    return (((this.NowHour - this.start) * 60) + this.NowMinutes)
                 },
-                RestInMinutes(){
-                    let rest = this.end - this.AlreadyInMinutes
+                RestInMinutes() {
+                    let rest = this.DifferenceInMinutes - this.AlreadyInMinutes
                     return rest
                 },
-                getProgress(){
-                    let percent = (this.AlreadyInMinutes / this.end) * 100
-                    return `width: ${percent}%`
+                RestInHours() {
+                    let rest = this.DifferenceInMinutes - this.AlreadyInMinutes
+                    let hours = Math.floor(this.RestInMinutes / 60)
+                    if (hours >= 1) {
+                        return `${hours} ч.`
+                    } else {
+                        return ''
+                    }
+                },
+                getPercentProgress() {
+                    let percent = (this.AlreadyInMinutes / this.DifferenceInMinutes) * 100
+                    return percent
+                },
+                getProgress() {
+                    return `width: ${this.getPercentProgress}%`
+                },
+                computeStyle() {
+                    let x = this.getPercentProgress
+                    if (x <= 50) {
+                        return 'bg-danger'
+                    }
+                    if (x >= 80) {
+                        return 'bg-success'
+                    } else {
+                        return 'bg-warning'
+                    }
                 }
             },
-            methods:{
-                playVoice(){
-                    playAudio('src')
+            methods: {
+                playVoice() {
+                    try {
+                        playAudio('src')
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
+
             }
         })
     </script>
-  </body>
+</body>
+
 </html>
